@@ -1,6 +1,6 @@
 #include <iostream>
-#include <SDL2/SDL.h>
 #include "chip8.h"
+#include "graphics.h"
 
 int main(int argc, char* argv[])
 {
@@ -11,12 +11,20 @@ int main(int argc, char* argv[])
     }
 
     Chip8 chip8;
+    Graphics graphics;
+
     if (!chip8.load_rom(argv[1]))
         return 1;
 
     while (1)
     {
         chip8.emulate_cycle();
+        if (chip8.update_screen)
+        {
+            graphics.draw_screen(chip8.screen);
+            chip8.update_screen = false;
+        }
+
     }
     return 0;
 }

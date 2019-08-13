@@ -1,37 +1,39 @@
-#ifndef CHIP8_H
-# define CHIP8_H
+#pragma once
 
 #include <cstdint>
 #include <array>
 
-# define MEM_SIZE 4096
+#define MEM_SIZE 4096
 
 class Chip8
 {
   public:
+
     Chip8();
     bool load_rom(char* filename);
+    void emulate_cycle();
+
+    bool update_screen;
+    std::array<std::array<bool, 64>, 32> screen;
+  private:
+
     void clear_screen();
     void draw_sprite(int x, int y);
     bool key_pressed(int x);
-    void emulate_cycle();
 
-  private:
-    std::array<std::uint8_t, MEM_SIZE> memory;
-    std::array<std::uint8_t, 16> V;
-    std::array<std::uint16_t, 16> stack;
-    std::uint16_t sp;
-
-    std::uint16_t I;
-    std::uint16_t pc;
     std::uint16_t opcode;
+    std::uint16_t pc;
+    std::uint16_t I;
+    std::uint16_t sp;
 
     std::uint8_t delay_timer;
     std::uint8_t sound_timer;
-    
-    std::array<bool, 16> keys;
 
-    std::array<std::array<bool, 64>, 32> screen;
+    std::array<std::uint8_t, MEM_SIZE> memory;
+    std::array<std::uint8_t, 16> V;
+    std::array<std::uint16_t, 16> stack;
+
+    std::array<bool, 16> keys;
 
     const std::array<std::uint8_t, 80> fontset =
     {
@@ -52,8 +54,4 @@ class Chip8
         0xF0, 0x80, 0xF0, 0x80, 0xF0, // E
         0xF0, 0x80, 0xF0, 0x80, 0x80  // F
     };
-
-    bool update_screen;
 };
-
-#endif
