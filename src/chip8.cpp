@@ -6,15 +6,9 @@
 #include "chip8.h"
 
 Chip8::Chip8()
+    : update_screen(false), opcode(0), pc(0x200), I(0), sp(0)
+    , delay_timer(0), sound_timer(0)
 {
-    opcode = 0;
-    pc = 0x200;
-    I = 0;
-    sp = 0;
-
-    delay_timer = 0;
-    sound_timer = 0;
-
     memory.fill(0);
     V.fill(0);
     stack.fill(0);
@@ -24,7 +18,6 @@ Chip8::Chip8()
         memory[i] = fontset[i];
 
     clear_screen();
-    update_screen = false;
     std::srand(std::time(nullptr));
 }
 
@@ -68,10 +61,10 @@ void Chip8::draw_sprite(int x, int y)
         {
             if ((sprite & (0x80 >> i)) != 0)
             {
-                if (screen[V[y] + i][V[x] + i] == 1)
+                if (screen[V[y] + j][V[x] + i])
                     V[0xF] = 1;
+                screen[V[y] + j][V[x] + i] = !screen[V[y] + j][V[x] + i];
             }
-            screen[V[y] + j][V[x] + i] = !screen[V[y] + j][V[x] + i];
         }
     }
     update_screen = true;
@@ -306,14 +299,14 @@ void Chip8::emulate_cycle()
                     break;
 
                 case 0x0055:
-                    for (int i = 0; i < x; i++)
+                    for (int i = 0; i <= x; i++)
                         memory[I + i] = V[i];
                     pc += 2;
                     break;
 
                 case 0x0065:
-                    for (int i = 0; i < x; i++)
-                        V[I + i] = memory[i];
+                    for (int i = 0; i <= x; i++)
+                        V[i] = memory[I + i];
                     pc += 2;
                     break;
 
