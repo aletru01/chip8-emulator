@@ -327,5 +327,9 @@ void Chip8::emulate_cycle()
         delay_timer--;
 
     if (sound_timer > 0)
+    {
+        if (sound_timer == 1)
+            std::cout << "tuut" << std::endl;
         sound_timer--;
+    }
 }

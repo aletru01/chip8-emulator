@@ -1,6 +1,5 @@
 #pragma once
 
-#include <cstdint>
 #include <array>
 
 #define MEM_SIZE 4096
@@ -15,6 +14,7 @@ class Chip8
 
     bool update_screen;
     std::array<std::array<bool, 64>, 32> screen;
+    std::array<bool, 16> keys;
   private:
 
     void clear_screen();
@@ -32,8 +32,6 @@ class Chip8
     std::array<std::uint8_t, MEM_SIZE> memory;
     std::array<std::uint8_t, 16> V;
     std::array<std::uint16_t, 16> stack;
-
-    std::array<bool, 16> keys;
 
     const std::array<std::uint8_t, 80> fontset =
     {
